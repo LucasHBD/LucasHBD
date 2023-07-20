@@ -177,9 +177,9 @@ health_bar_y2 = 580
 health_bar_color2 = (0, 255, 0)
 # Disparos
 shots = []
-shot_speed = 8
+shot_speed = 10
 boss_shots = []
-boss_shot_speed = 8
+boss_shot_speed = 10
 shot_cooldown = 500
 last_shot_time = 0
 #Som
