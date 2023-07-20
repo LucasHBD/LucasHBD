@@ -126,6 +126,24 @@ def move_boss(keys, boss_rect):
         if boss_rect.bottom > 300:
             boss_rect.bottom = 300
 
+def reset_game():
+    global current_health, current_health2, game_state, shots, boss_shots, last_shot_time
+
+    current_health = 100
+    current_health2 = 100
+    game_state = "Jogando"
+    shots = []
+    boss_shots = []
+    last_shot_time = 0
+
+    # reiniciando as posições das coisas
+    ship_rect.y = 600 - boss_rect.bottom
+    ship_rect.x = 400
+    boss_rect.y = 0
+    boss_rect.x = 400
+
+    mixer.music.unpause()
+
 display = game_init(800, 600)
 
 # Background
@@ -167,28 +185,32 @@ last_shot_time = 0
 sound1 = pygame.mixer.Sound("shoot.mp3")
 sound2 = pygame.mixer.Sound("hit.mp3")
 sound3 = pygame.mixer.Sound("win.mp3")
-mixer.music.load("bg_music.mp3")
+aa = mixer.music.load("bg_music.mp3")
 mixer.music.play(-1)
 #Fonte
 font = pygame.font.Font(None, 32)
 text_color = (0, 200, 200)
 
 game_state = "Jogando"
-
+run = True
 clock = pygame.time.Clock()
-while True:
+
+while run:
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
     keys = pygame.key.get_pressed()
+    if keys[pygame.K_ESCAPE]:
+        run = False
     if game_state == "Jogando":
         if keys[pygame.K_f]:
             current_time = pygame.time.get_ticks()
             if current_time - last_shot_time > shot_cooldown:
                 create_shot(ship_rect.x, ship_rect.y)
                 last_shot_time = current_time
-        if keys[pygame.K_RCTRL]:
+        if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:
             current_time = pygame.time.get_ticks()
             if current_time - last_shot_time > shot_cooldown:
                 create_boss_shot(boss_rect.x, boss_rect.y + boss_rect.height)
@@ -218,40 +240,25 @@ while True:
         display.blit(background_img, (0, 0))
         text_win = font.render("Jogador 1 Venceu! Aperte [R] Para Reiniciar Ou [Q] Para Sair", True, text_color)
         text_win_rect = text_win.get_rect()
-        text_win_rect.center = (display.get_width() // 2, display.get_height() // 2)
         mixer.music.pause()
+        if keys[pygame.K_q]:
+            break
+        if keys[pygame.K_r]:
+            reset_game()
+        text_win_rect.center = (display.get_width() // 2, display.get_height() // 2)
         display.blit(text_win, text_win_rect)
-        # if keys[pygame.K_r]:
-        #     game_state = "Jogando"
-        #     current_health = 100
-        #     current_health2 = 100
-        #     ship_rect.y = 600 - boss_rect.bottom
-        #     ship_rect.x = 400
-        #     boss_rect.y = 0
-        #     boss_rect.x = 400
-        #     mixer.music.play(-1)
-        # if keys[pygame.K_q]:
-        #     pygame.quit()
-        #     sys.exit()            
+         
     elif game_state == "Vencedor 2":
         display.blit(background_img, (0, 0))
         text_win2 = font.render("Jogador 2 Venceu! Aperte [R] Para Reiniciar Ou [Q] Para Sair", True, text_color)
         text_win_rect2 = text_win2.get_rect()
-        text_win_rect2.center = (display.get_width() // 2, display.get_height() // 2)
         mixer.music.pause()
+        if keys[pygame.K_q]:
+            break
+        if keys[pygame.K_r]:
+            reset_game()
+        text_win_rect2.center = (display.get_width() // 2, display.get_height() // 2)
         display.blit(text_win2, text_win_rect2)
-        # if keys[pygame.K_r]:
-        #     game_state = "Jogando"
-        #     current_health = 100
-        #     current_health2 = 100
-        #     ship_rect.y = 600 - boss_rect.bottom
-        #     ship_rect.x = 400
-        #     boss_rect.y = 0
-        #     boss_rect.x = 400
-        #     mixer.music.play(-1)
-        # if keys[pygame.K_q]:
-        #     pygame.quit()
-        #     sys.exit()
-        # display.blit(text_win, text_win_rect)
+    
     pygame.display.flip()
     clock.tick(60)
