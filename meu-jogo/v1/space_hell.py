@@ -126,6 +126,7 @@ def move_boss(keys, boss_rect):
         if boss_rect.bottom > 300:
             boss_rect.bottom = 300
 
+#Condição
 def reset_game():
     global current_health, current_health2, game_state, shots, boss_shots, last_shot_time
 
@@ -137,9 +138,9 @@ def reset_game():
     last_shot_time = 0
 
     # reiniciando as posições das coisas
-    ship_rect.y = 600 - boss_rect.bottom
+    ship_rect.y = 545
     ship_rect.x = 400
-    boss_rect.y = 0
+    boss_rect.y = 5
     boss_rect.x = 400
 
     mixer.music.unpause()
@@ -155,9 +156,9 @@ ship_rect = ship.get_rect()
 boss = pygame.transform.flip(pygame.image.load("Boss.bmp"), False, True)
 boss.set_colorkey((255, 0, 255))
 boss_rect = boss.get_rect()
-ship_rect.y = 600 - boss_rect.bottom
+ship_rect.y = 545
 ship_rect.x = 400
-boss_rect.y = 0
+boss_rect.y = 5
 boss_rect.x = 400
 # Barra de Vida
 max_health = 100
